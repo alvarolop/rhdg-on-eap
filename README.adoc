@@ -47,6 +47,7 @@ JBoss EAP is an open source platform for highly transactional, web-scale Java ap
 * *Streamlined datasource management*: Database drivers are deployed similarly to other JBoss EAP services.
 * *Unified security framework*: Elytron provides a single unified framework for managing and configuring access for both standalone servers and managed domains.
 
+Find https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4[here] all the documentation for the latest release of JBoss EAP.
 
 == Installing JBoss EAP
 
