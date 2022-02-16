@@ -1,0 +1,111 @@
+= Red Hat Data Grid on JBoss EAP
+Álvaro López Medina <alopezme@redhat.com>
+v1.0, 2022-02
+// Create TOC wherever needed
+:toc: macro
+:sectanchors:
+:sectnumlevels: 2
+:sectnums: 
+:source-highlighter: pygments
+:imagesdir: images
+// Start: Enable admonition icons
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+ifndef::env-github[]
+:icons: font
+endif::[]
+// End: Enable admonition icons
+// Refs
+:eap-server-file: jboss-eap-7.4
+:eap-server-patch: jboss-eap-7.4.3-patch
+
+// Create the Table of contents here
+toc::[]
+
+
+== Introduction
+
+This repository demonstrates how to use features of Red Hat's latest Data Grid release on JBoss EAP applications. 
+
+
+== JBoss EAP
+
+JBoss EAP is an open source platform for highly transactional, web-scale Java applications. JBoss EAP combines the familiar and popular Jakarta EE specifications with the latest technologies, like Eclipse MicroProfile, to modernize your applications from traditional Java EE into the new world of DevOps, cloud, containers, and microservices.
+
+=== JBoss EAP 7 features
+
+* *Jakarta EE compatible*: JBoss EAP 7.4 is Jakarta EE 8 compatible implementation for both Web Profile and Full Platform specifications.
+* *Managed Domain*: Centralized management of multiple server instances and physical hosts, compared to a standalone server that supports just a single server instance.
+* *Management console and management CLI*: New domain or standalone server management interfaces. The management CLI includes a batch mode that scripts and automates management tasks.
+* *Simplified directory layout*: The modules directory contains application server modules.
+* *Modular class-loading mechanism*: Modules are loaded and unloaded on demand. This practice improves security performance and reduces startup and restart times.
+* *Streamlined datasource management*: Database drivers are deployed similarly to other JBoss EAP services.
+* *Unified security framework*: Elytron provides a single unified framework for managing and configuring access for both standalone servers and managed domains.
+
+
+== Installing JBoss EAP
+
+This section explains how to install and upgrade the JBoss EAP server. The binaries are available on the RH https://access.redhat.com/jbossnetwork/restricted/listSoftware.html?product=appplatform&downloadType=distributions[downloads website].
+
+
+1. Download the latest version of the server (Currently 7.4) and its latest patch (Currently 7.4.3).
++
+2. Unzip the server `.zip`.
++
+[source, bash, subs="attributes"]
+----
+cd ~/Downloads 
+unzip {eap-server-file}.0.zip
+----
++
+3. Patch the server using the following command: 
++
+[source, bash, subs="attributes"]
+----
+./{eap-server-file}/bin/jboss-cli.sh "patch apply {eap-server-patch}.zip"
+----
+
+More detailed information:
+
+* https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/installation_guide/index[Installation guide].
+* https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/patching_and_upgrading_guide/index#proc_archive-patching-management-cli_default[Upgrading guide].
+
+
+== Running JBoss EAP
+
+Run the server instance with the following command: 
+
+[source, bash, subs="attributes"]
+----
+./{eap-server-file}/bin/standalone.sh -c standalone-ha.xml
+----
+
+You should see the following output:
+[source, bash, subs="attributes"]
+----
+11:43:40,187 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: JBoss EAP 7.4.3.GA (WildFly Core 15.0.6.Final-redhat-00003) started in 6477ms - Started 336 of 669 services (451 services are lazy, passive or on-demand)
+11:43:40,191 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0060: Http management interface listening on http://127.0.0.1:9990/management
+11:43:40,192 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0051: Admin console listening on http://127.0.0.1:9990
+----
+
+
+
+
+More detailed information:
+
+* https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/getting_started_guide/index#assembly-start-stop-jboss-eap_default[Getting started guide].
+
+
+== Client Application
+
+
+
+
+== Annex: Additional documentation
+
+
