@@ -172,10 +172,10 @@ This section compiles all the ways you can run a certified Data Grid cluster as 
 [cols="1,1,1,1,1"]
 |===
 | Feature
-| DG in C/S mode
-| DG in embedded mode
-| DG subsystem for EAP
-| EAP app with embedded mode
+| 1. DG in C/S mode
+| 2. DG in embedded mode
+| 3. DG subsystem for EAP
+| 4. EAP app with embedded mode
 
 | Advanced features 
 | *Pro*: Full capabilities: Metrics, Queries, Remote Code execution, etc.
