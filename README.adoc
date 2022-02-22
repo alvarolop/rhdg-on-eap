@@ -49,7 +49,7 @@ JBoss EAP is an open source platform for highly transactional, web-scale Java ap
 
 Find https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4[here] all the documentation for the latest release of JBoss EAP.
 
-== Installing JBoss EAP
+=== Installing JBoss EAP
 
 This section explains how to install and upgrade the JBoss EAP server. The binaries are available on the RH https://access.redhat.com/jbossnetwork/restricted/listSoftware.html?product=appplatform&downloadType=distributions[downloads website].
 
@@ -60,30 +60,32 @@ This section explains how to install and upgrade the JBoss EAP server. The binar
 +
 [source, bash, subs="attributes"]
 ----
-cd ~/Downloads 
+cd ~/Downloads
 unzip {eap-server-file}.0.zip
+export EAP_HOME="/home/alvaro/Downloads/RHDG/{eap-server-file}/"
 ----
 +
 3. Patch the server using the following command: 
 +
 [source, bash, subs="attributes"]
 ----
-./{eap-server-file}/bin/jboss-cli.sh "patch apply {eap-server-patch}.zip"
+$EAP_HOME/bin/jboss-cli.sh "patch apply {eap-server-patch}.zip"
 ----
 
 More detailed information:
 
-* https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/installation_guide/index[Installation guide].
-* https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/patching_and_upgrading_guide/index#proc_archive-patching-management-cli_default[Upgrading guide].
+* EAP 7.4 Doc: https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/installation_guide/index[Installation guide].
+* EAP 7.4 Doc: https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/patching_and_upgrading_guide/index#proc_archive-patching-management-cli_default[Upgrading guide].
 
 
-== Running JBoss EAP
+=== Running JBoss EAP
 
 Run the server instance with the following command: 
 
 [source, bash, subs="attributes"]
 ----
-./{eap-server-file}/bin/standalone.sh -c standalone-ha.xml
+${EAP_HOME}/bin/standalone.sh -c standalone-ha.xml
+${EAP_HOME}/bin/add-user.sh -u 'admin' -p 'admin'
 ----
 
 You should see the following output:
@@ -95,18 +97,151 @@ You should see the following output:
 ----
 
 
+More detailed information:
+
+* EAP 7.4 Doc: https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/getting_started_guide/index#assembly-start-stop-jboss-eap_default[Getting started guide].
+
+
+== Infinispan
+
+The infinispan subsystem provides caching support for JBoss EAP. It allows you to configure and view runtime metrics for named cache containers and caches. It provides value as a standard architectural component in application infrastructures for a variety of real-world scenarios and use cases:
+
+* Data caching and transient data storage.
+
+* Primary data store.
+
+* Low latency compute grid.
+
 
 
 More detailed information:
 
-* https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/getting_started_guide/index#assembly-start-stop-jboss-eap_default[Getting started guide].
+* EAP 7.4 Doc: https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/configuration_guide/index#infinispan[Infinispan].
 
 
-== Client Application
+=== Configure Infinispan submodule
+Use the Infinispan submodule to create a common cache for your applications:
+
+[source, bash, subs="attributes"]
+----
+${EAP_HOME}/bin/jboss-cli.sh -c --file=standalone-local.cli
+
+# Outcome
+{"outcome" => "success"}
+{"outcome" => "success"}
+----
+
+
+
+== The client application
+
+We have created a small application to test the previous mentioned features of Infinispan for JBoss EAP. It is a Java application that allows to perform CRUD operations to a cache.
 
 
 
 
-== Annex: Additional documentation
+
+=== Deploy the client application
+
+In order to run the Java application, you will have to package it normally and deploy it to the JBoss EAP instance. Use the following commands:
+
+[source, bash]
+----
+mvn clean package
+cp target/rhdg-on-eap.war $EAP_HOME/standalone/deployments
+----
 
 
+=== Run the client application
+
+
+
+
+
+
+
+== Comparison between Data Grid options
+
+This section compiles all the ways you can run a certified Data Grid cluster as a cache and summarizes some of the pros / cons that I found:
+
+1. Red Hat Data Grid in Client / Server mode
+2. Red Hat Data Grid in Embedded mode
+3. Infinispan subsystem for EAP (RHDG feature integrated with EAP server).
+4. Java application running inside EAP with Data Grid in embedded mode.
+
+[cols="1,1,1,1,1"]
+|===
+| Feature
+| DG in C/S mode
+| DG in embedded mode
+| DG subsystem for EAP
+| EAP app with embedded mode
+
+| Advanced features 
+| *Pro*: Full capabilities: Metrics, Queries, Remote Code execution, etc.
+| *Pro*: Full capabilities: Metrics, Queries, Remote Code execution, etc.
+| *Con*: Reduced capabilities 
+| *Pro*: Full capabilities: Metrics, Queries, Remote Code execution, etc.
+
+| Coupling and DG upgrades
+| *Pro*: Decouples the cache and app lifecycle. Application upgrades don't force cached data rebalancing. RHDG upgrades don't impact applications.
+| *Con*: Cache and app lifecycle are coupled. Application upgrades force cached data rebalancing and upgrading Data Grid version implies restarting all the application nodes.
+| *Pro*: Decouples the cache and app lifecycle. Application upgrades don't force cached data rebalancing. RHDG version is managed by EAP, not the application. RHDG upgrades don't impact applications.
+| *Con*: Cache and app lifecycle are coupled. Application upgrades force cached data rebalancing and upgrading Data Grid version implies restarting all the application nodes.
+
+| Restarts 
+| *Pro*: App node restarts don't imply loosing cached data. 
+| *Con*: App node restarts imply loosing or rebalancing cached data. 
+| *Pro*: App node restarts don't imply loosing cached data. 
+| *Con*: App node restarts imply loosing or rebalancing cached data. 
+
+| Data Access 
+| *Pro*: You can use your data from any client application, even non-Java clients.
+| *Con*: You can only access data from the same application.
+| *Pro/Con*: You can share your caches among all your applications deployed on that EAP cluster, but cannot expose a Hot Rod endpoint to access those caches from outside the EAP cluster.
+| *Con*: You can only access data from the same application.
+
+| Consumption
+| *Con*: More Mem/CPU consumption, as you need to deploy JVMs both for app and Data Grid, and provide sufficient resources to both JVMs to avoid OutOfMemory exceptions.
+| *Con*: Less Mem/CPU consumption as you share the JVM for both app and cache.
+| *Con*: Less Mem/CPU consumption as you share the JVM for both app and cache.
+| *Con*: Less Mem/CPU consumption as you share the JVM for both app and cache.
+
+| Subscriptions 
+| *Con*: All Data Grid servers need Data Grid entitlements. 
+| *Pro*: All JVMs need Data Grid entitlements. 
+| *Con*: All EAPs need both EAP and Data Grid entitlements. 
+| *Con*: All EAPs need both EAP and Data Grid entitlements. 
+
+| Data Grid version 
+| *Pro*: Use the latest version as soon as the new version is Generally Available (GA).
+| *Pro*: Use the latest version as soon as the new version is Generally Available (GA).
+| *Con*: After the new DG version is released, you have to wait for the EAP team to integrate it in EAP. Check https://access.redhat.com/articles/112673[here] current Data Grid bits version in EAP releases.
+| *Pro*: Use the latest version as soon as the new version is Generally Available (GA).
+
+|===
+
+
+
+:!sectnums:
+
+
+== Annex A: Installing EAP modules manually
+
+WARNING: This section is only for EAP version < 7.4.0.GA
+
+To use Data Grid inside applications deployed to Red Hat JBoss EAP, you should install Data Grid modules that:
+
+* Let you deploy applications without packaging Data Grid JAR files in your WAR or EAR file.
+* Allow you to use a Data Grid version that is independent to the one bundled with Red Hat JBoss EAP.
+
+More detailed information:
+
+* https://access.redhat.com/documentation/en-us/red_hat_data_grid/8.2/html-single/data_grid_developer_guide/index#ispn_modules[RHDG 8.3 Documentation: Data Grid Modules for Red Hat JBoss EAP].
+
+
+
+== Annex B: Additional documentation
+
+* EAP Documentation: https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/configuration_guide/index#jdg_externalize_http_sessions[Externalize HTTP Sessions to Red Hat Data Grid].
+* EAP Documentation: https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html/development_guide/clustering_in_web_applications#session-managenemt-via-hotrod[Storing Web Session Data In a Remote Red Hat Data Grid].
