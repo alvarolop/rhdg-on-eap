@@ -124,7 +124,7 @@ Use the Infinispan submodule to create a common cache for your applications:
 
 [source, bash, subs="attributes"]
 ----
-${EAP_HOME}/bin/jboss-cli.sh -c --file=standalone-local.cli
+${EAP_HOME}/bin/jboss-cli.sh -c --file=jboss-cli/standalone-local.cli
 
 # Outcome
 {"outcome" => "success"}
@@ -155,6 +155,9 @@ cp target/rhdg-on-eap.war $EAP_HOME/standalone/deployments
 === Run the client application
 
 
+Right after copying the `.war` file, you will be able to access the application on this URL `http://127.0.0.1:8080/rhdg-on-eap`.
+
+
 
 
 
@@ -180,7 +183,7 @@ This section compiles all the ways you can run a certified Data Grid cluster as 
 | Advanced features 
 | *Pro*: Full capabilities: Metrics, Queries, Remote Code execution, etc.
 | *Pro*: Full capabilities: Metrics, Queries, Remote Code execution, etc.
-| *Con*: Reduced capabilities 
+| *Con*: Reduced capabilities.
 | *Pro*: Full capabilities: Metrics, Queries, Remote Code execution, etc.
 
 | Coupling and DG upgrades
@@ -245,3 +248,4 @@ More detailed information:
 
 * EAP Documentation: https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/configuration_guide/index#jdg_externalize_http_sessions[Externalize HTTP Sessions to Red Hat Data Grid].
 * EAP Documentation: https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html/development_guide/clustering_in_web_applications#session-managenemt-via-hotrod[Storing Web Session Data In a Remote Red Hat Data Grid].
+* KCS: https://access.redhat.com/solutions/1172493[How to monitor Infinispan statistics in JBoss EAP 6/7].
