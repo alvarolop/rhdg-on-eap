@@ -4,7 +4,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Simple application to access the RHDG cache configured inside of the EAP configuration</title>
+<title>DG on EAP app</title>
 </head>
 
 <!--
@@ -13,16 +13,28 @@
  -->
 <body>
 
-    <h1>Simple add String based keys and values to the Cache</h1>
+    <h1>Cache access</h1>
     <div id="container">
-        <h:form id="invokeForm">
-            <h:panelGrid columns="3">
+        <h:form id="addForm">
+            <h2>Put operation</h2>
+            <h:panelGrid columns="4">
                 <h:outputLabel>Key:</h:outputLabel>
                 <h:inputText value="#{cache.key}" />
+                <h:outputLabel>Value:</h:outputLabel>
                 <h:inputText value="#{cache.value}" />
             </h:panelGrid>
             <h:panelGrid columns="4">
                 <h:commandButton id="add" value="Add" action="#{jsfController.add()}" />
+            </h:panelGrid>
+        </h:form>
+        <h:form id="getForm">
+            <h2>Get operation</h2>
+            <h:panelGrid columns="4">
+                <h:outputLabel>Key:</h:outputLabel>
+                <h:inputText value="#{cache.key}" />
+                <h:outputLabel value="Value: #{cache.value}"/>
+            </h:panelGrid>
+            <h:panelGrid columns="4">
                 <h:commandButton id="get" value="Get" action="#{jsfController.get()}" />
                 <h:commandButton id="del" value="Delete" action="#{jsfController.delete()}" />
                 <h:commandButton id="list" value="List" action="#{jsfController.list()}" />
@@ -30,9 +42,11 @@
             </h:panelGrid>
         </h:form>
         <h:form id="response">
+            <h2>Cache properties</h2>
             <h:panelGrid columns="1">
-                <h:outputLabel value="#{cache.entries}" />
-                <h:outputLabel value="#{cache.size}" />
+                <h:outputLabel value="Entries: #{cache.entries}" />
+                <h:outputLabel value="Size: #{cache.size}" />
+                <h:commandButton id="clear" value="Test" action="#{jsfController.test()}" />
             </h:panelGrid>
         </h:form>
         <br /> <br />

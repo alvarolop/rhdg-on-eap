@@ -8,6 +8,7 @@ import javax.inject.Named;
 
 import org.infinispan.Cache;
 import org.infinispan.container.entries.CacheEntry;
+import org.infinispan.manager.EmbeddedCacheManager;
 import org.jboss.logging.Logger;
 
 /**
@@ -34,6 +35,12 @@ public class JsfController {
    */
   @Resource(name = "ApplicationCache")
   Cache<String, String> cache;
+
+  @Resource(name = "ApplicationCache2")
+  Cache<String, String> cache2;
+
+  @Resource(name = "infinispan/CacheManager")
+  EmbeddedCacheManager cacheManager;
 
   /**
    * Initialize the controller.
@@ -97,6 +104,17 @@ public class JsfController {
   public void getSize() {
     LOGGER.info("size is " + cache.size());
     cacheView.setSize(cache.size());
+  }
+
+  /**
+   * This method compiles several features that can be achieved
+   * using DG on EAP
+   */
+  public void test() {
+    LOGGER.info("Caches list: " + cacheManager.getCacheNames());
+    LOGGER.info("\n\nCache 1 configuration: \n" + cache.getCacheConfiguration().toXMLString("AppCache1") + "\n");
+    LOGGER.info("\n\nCache 2 configuration: \n" + cache2.getCacheConfiguration().toXMLString("AppCache2") + "\n");
+    LOGGER.info("Cache 1 size is " + cache.size());
   }
 
 }
