@@ -40,13 +40,13 @@ create-cache-local:
 ifndef EAP_HOME
 	$(error EAP_HOME is undefined. Please, set the env var to the correct value. Example: `export EAP_HOME=/home/alvaro/Downloads/RHDG/jboss-eap-7.4`)
 endif
-	${EAP_HOME}/bin/jboss-cli.sh -c --file=jboss-cli/standalone-local.cli
+	${EAP_HOME}/bin/jboss-cli.sh -c --file=cache-config/standalone-local.cli
 
 create-cache-clustered:
 ifndef EAP_HOME
 	$(error EAP_HOME is undefined. Please, set the env var to the correct value. Example: `export EAP_HOME=/home/alvaro/Downloads/RHDG/jboss-eap-7.4`)
 endif
-	${EAP_HOME}/bin/jboss-cli.sh -c --file=jboss-cli/standalone-cluster.cli
+	${EAP_HOME}/bin/jboss-cli.sh -c --file=cache-config/standalone-cluster.cli
 
 #########################
 # Other development tasks

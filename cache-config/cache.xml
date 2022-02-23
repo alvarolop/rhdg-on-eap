@@ -1,0 +1,4 @@
+<distributed-cache name="AppCache2" owners="3">
+  <heap-memory size="400000000"/> <!-- 400 MB -->
+  <expiration lifespan="600000"/> <!-- 10 min -->
+</distributed-cache>
