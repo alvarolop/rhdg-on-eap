@@ -249,3 +249,4 @@ More detailed information:
 * EAP Documentation: https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html-single/configuration_guide/index#jdg_externalize_http_sessions[Externalize HTTP Sessions to Red Hat Data Grid].
 * EAP Documentation: https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.4/html/development_guide/clustering_in_web_applications#session-managenemt-via-hotrod[Storing Web Session Data In a Remote Red Hat Data Grid].
 * KCS: https://access.redhat.com/solutions/1172493[How to monitor Infinispan statistics in JBoss EAP 6/7].
+* RH Developer Blog: https://developers.redhat.com/articles/2021/06/29/integrate-red-hat-data-grid-and-red-hat-jboss-enterprise-application-platform?source=sso[ Integrate Red Hat Data Grid and Red Hat JBoss Enterprise Application Platform on Red Hat OpenShift]
