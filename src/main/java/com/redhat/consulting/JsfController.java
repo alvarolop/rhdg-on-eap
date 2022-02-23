@@ -33,10 +33,10 @@ public class JsfController {
    * so the indirection with <resource-ref> in web.xml is needed until the bug is fixed.
    * Also the boss-deployment-structure.xml is necessary to have the dependency for org.infinispan classes otherwise there might be confusing failures
    */
-  @Resource(name = "ApplicationCache")
+  @Resource(name = "ApplicationCache2")
   Cache<String, String> cache;
 
-  @Resource(name = "ApplicationCache2")
+  @Resource(name = "ApplicationCache")
   Cache<String, String> cache2;
 
   @Resource(name = "infinispan/CacheManager")
@@ -92,6 +92,7 @@ public class JsfController {
   public void list() {
     LOGGER.info("Try to list items");
     StringBuilder result = new StringBuilder();
+    cache.clear();
     // read cache
     for (String key : cache.keySet()) {
       result.append(key + "  :  ");

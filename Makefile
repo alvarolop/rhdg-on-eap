@@ -22,6 +22,12 @@ ifndef EAP_HOME
 endif
 	sh ${EAP_HOME}/bin/standalone.sh -c standalone-ha.xml
 
+run-eap-02:
+ifndef EAP_HOME
+	$(error EAP_HOME is undefined. Please, set the env var to the correct value. Example: `export EAP_HOME=/home/alvaro/Downloads/RHDG/jboss-eap-7.4`)
+endif
+	sh ${EAP_HOME}/bin/standalone.sh -Djboss.socket.binding.port-offset=100 -c standalone-ha.xml 
+
 deploy:
 ifndef EAP_HOME
 	$(error EAP_HOME is undefined. Please, set the env var to the correct value. Example: `export EAP_HOME=/home/alvaro/Downloads/RHDG/jboss-eap-7.4`)
